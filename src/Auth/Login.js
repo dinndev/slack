@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { svg } from "../Svg";
+import axios from "axios";
+import env from "react-dotenv";
+import { useAuthProvider } from "../States/AuthProvider";
 
 export default function Login({
   toggleLogin,
@@ -11,8 +13,34 @@ export default function Login({
     register,
     handleSubmit,
     formState: { errors },
+    resetField,
   } = useForm();
-  const getUserInfo = (_) => {};
+  const [{ user }, dispatch] = useAuthProvider();
+  // set the current user to local storage
+  useEffect(() => {
+    localStorage.setItem("User", JSON.stringify(user));
+  }, [user]);
+  const getUserInfo = async (data) => {
+    const userInfo = {
+      email: data.email,
+      password: data.password,
+    };
+    try {
+      let res = await axios
+        .post(`${env.API_URL}/auth/sign_in`, userInfo)
+        .then(({ data }) => data);
+      const user = res.data;
+      // set current user to state user
+      dispatch({
+        type: "SET_USER",
+        user: user,
+      });
+      resetField("email");
+      resetField("password");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handeleToggleLogin = (_) => {
     setToggleLogin(false);
     setToggleSignup(true);
@@ -41,7 +69,7 @@ export default function Login({
         </div>
         <div className="flex justify-between items-end mt-10">
           <div className="w-4/5 flex flex-col justify-between items-start ">
-            <label htmlFor="email" className="text-xs text-gray-400">
+            <label htmlFor="password" className="text-xs text-gray-400">
               Password
             </label>
             <input

@@ -17,8 +17,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-dotenv && react-scripts start",
+    "build": "react-dotenv && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -44,5 +44,10 @@
     "autoprefixer": "^10.4.2",
     "postcss": "^8.4.8",
     "tailwindcss": "^3.0.23"
+  },
+  "react-dotenv": {
+    "whitelist": [
+      "API_URL"
+    ]
   }
 }

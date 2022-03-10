@@ -1,22 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { svg } from "../Svg";
 import { useAuthProvider } from "../States/AuthProvider";
 import PasswordChecklist from "react-password-checklist";
+import env from "react-dotenv";
+import axios from "axios";
 
 export default function Signup({ setToggleSignup, setToggleLogin }) {
   const [onChangePassword, setOnchangePassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [state, dispatch] = useAuthProvider();
+  const [{ user, accounts }, dispatch] = useAuthProvider();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const getUserInfo = (_) => {
-    // toggle the components
+  const getUserInfo = async (data) => {
+    const { email, password, userName } = data;
+    if (isPasswordValid) {
+      // try if the input is valid
+      try {
+        let res = await axios.post(`${env.API_URL}/auth`, {
+          email,
+          password,
+          nickname: userName,
+        });
+        // toggle the components
+        setToggleLogin(true);
+        setToggleSignup(false);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+  const handleToggleLogin = (_) => {
     setToggleLogin(true);
     setToggleSignup(false);
+  };
+  const checkUser = (user) => {
+    return accounts.some(({ email }) => email === user.email);
   };
   return (
     <>
@@ -74,7 +97,12 @@ export default function Signup({ setToggleSignup, setToggleLogin }) {
         <p className="my-14 text-xs text-gray-400">
           {" "}
           Don't have an account?{" "}
-          <span className="font-bold  text-xs text-gray-500">Login</span>
+          <span
+            onClick={handleToggleLogin}
+            className="cursor-pointer font-bold  text-xs text-gray-500"
+          >
+            Login
+          </span>
         </p>
         {onChangePassword && (
           <PasswordChecklist

@@ -13,11 +13,11 @@ const ACTIONS = {
 
 export default function AuthReducer(state, action) {
   const { set_user } = ACTIONS;
-  switch (ACTIONS) {
+  switch (action.type) {
     case set_user:
       return {
         ...state,
-        user: action.user,
+        user: { ...action.user },
       };
   }
 }
