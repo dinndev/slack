@@ -14,8 +14,8 @@ export default function Login({
   } = useForm();
   const getUserInfo = (_) => {};
   const handeleToggleLogin = (_) => {
-    setToggleSignup(true);
     setToggleLogin(false);
+    setToggleSignup(true);
   };
   return (
     <>

@@ -1,22 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { svg } from "../Svg";
+import { useAuthProvider } from "../States/AuthProvider";
+import PasswordChecklist from "react-password-checklist";
 
-export default function Signup({
-  setToggleSignup,
-  isSignupOpen,
-  setToggleLogin,
-}) {
+export default function Signup({ setToggleSignup, setToggleLogin }) {
+  const [onChangePassword, setOnchangePassword] = useState("");
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [state, dispatch] = useAuthProvider();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const handleToggleSignup = (_) => {};
   const getUserInfo = (_) => {
-    // setToggleSignUp(!isSignupOpen);
-    setToggleSignup(!isSignupOpen);
+    // toggle the components
     setToggleLogin(true);
+    setToggleSignup(false);
   };
   return (
     <>
@@ -61,18 +61,31 @@ export default function Signup({
               type="password"
               name="password"
               autoComplete="true"
-              {...register("password", { required: "true" })}
+              {...register("password", {
+                required: "true",
+                onChange: (e) => setOnchangePassword(e.target.value),
+              })}
             />
           </div>
           <div className=" w-3/6 ml-8 flex justify-center items-center">
             <button type="submit">{svg.leftArrow}</button>
           </div>
         </div>
-        <p className="mt-14 text-xs text-gray-300">
+        <p className="my-14 text-xs text-gray-400">
           {" "}
           Don't have an account?{" "}
           <span className="font-bold  text-xs text-gray-500">Login</span>
         </p>
+        {onChangePassword && (
+          <PasswordChecklist
+            rules={["minLength", "number", "capital"]}
+            minLength={8}
+            value={onChangePassword}
+            onChange={(isValid) =>
+              isValid ? setIsPasswordValid(true) : setIsPasswordValid(false)
+            }
+          />
+        )}
       </form>
     </>
   );
