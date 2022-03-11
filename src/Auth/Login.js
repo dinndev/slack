@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import env from "react-dotenv";
 import { useAuthProvider } from "../States/AuthProvider";
+import { Alert, AlertIcon, Spinner } from "@chakra-ui/react";
 
 export default function Login({
   toggleLogin,
@@ -16,6 +17,11 @@ export default function Login({
     resetField,
   } = useForm();
   const [{ user }, dispatch] = useAuthProvider();
+  const [isLoading, setIsloading] = useState(false);
+  const [onChangeEmail, setOnchangeEmail] = useState("");
+  const [onChangePassword, setOnchangePassword] = useState("");
+  const [error, setError] = useState("");
+
   // set the current user to local storage
   useEffect(() => {
     localStorage.setItem("User", JSON.stringify(user));
@@ -26,19 +32,30 @@ export default function Login({
       password: data.password,
     };
     try {
+      // Spinner appear
+      setIsloading(true);
       let res = await axios
         .post(`${env.API_URL}/auth/sign_in`, userInfo)
-        .then(({ data }) => data);
+        .then(({ data }) => {
+          // Spinner done when request completed
+          setIsloading(false);
+          setError("");
+          return data;
+        });
+
       const user = res.data;
       // set current user to state user
       dispatch({
         type: "SET_USER",
         user: user,
       });
+      // reset fields
       resetField("email");
       resetField("password");
     } catch (error) {
-      console.log(error);
+      // set errors
+      setIsloading(false);
+      setError("Incorrect email or password");
     }
   };
   const handeleToggleLogin = (_) => {
@@ -47,7 +64,20 @@ export default function Login({
   };
   return (
     <>
-      <div className="w-3/4 h-1/6 flex justify-center items-center">
+      {isLoading && (
+        <div className="absolute w-full bg-white opacity-70 h-screen flex items-center justify-center">
+          <Spinner size="md" />
+        </div>
+      )}
+      {error !== "" && onChangePassword !== "" ? (
+        <Alert status="error">
+          <AlertIcon />
+          {error}
+        </Alert>
+      ) : (
+        ""
+      )}
+      <div className="w-3/4 h-1/6 flex justify-start items-center">
         <h1 className="text-4xl ">Login</h1>
       </div>
       <form
@@ -63,7 +93,10 @@ export default function Login({
               className="mt-4 bg-gray-100 border outline-none rounded-md p-3 w-full"
               type="email"
               name="email"
-              {...register("email", { required: "true" })}
+              {...register("email", {
+                required: "true",
+                onChange: (e) => setOnchangeEmail(e.target.value),
+              })}
             />
           </div>
         </div>
@@ -77,7 +110,10 @@ export default function Login({
               type="password"
               name="password"
               autoComplete="true"
-              {...register("password", { required: "true" })}
+              {...register("password", {
+                required: "true",
+                onChange: (e) => setOnchangePassword(e.target.value),
+              })}
             />
           </div>
 
@@ -88,7 +124,7 @@ export default function Login({
             Login
           </button>
         </div>
-        <p className="mt-14 text-xs  text-gray-300">
+        <p className="mt-14 text-xs  text-gray-400">
           {" "}
           Don't have an account?{" "}
           <span

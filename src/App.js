@@ -32,9 +32,6 @@ function App() {
       clamp: true,
     },
   });
-  const handeleToggleLogin = (_) => {
-    setToggleSignup(!isSignupOpen);
-  };
   return (
     <AuthProvider reducer={AuthReducer} initialState={initialState}>
       <div className="w-full bg-gray-600">
@@ -42,7 +39,7 @@ function App() {
           (style, item) =>
             item && (
               <animated.div
-                className="w-2/4 bg-white flex items-center justify-between flex-col h-screen"
+                className="w-2/4 relative bg-white flex items-center justify-between flex-col h-screen"
                 style={style}
               >
                 <Login
@@ -57,7 +54,7 @@ function App() {
           (style, item) =>
             item && (
               <animated.div
-                className="w-3/5 bg-white flex items-center justify-between flex-col h-screen"
+                className="w-3/5 relative bg-white flex items-center justify-between flex-col h-screen"
                 style={style}
               >
                 <Signup
@@ -68,7 +65,6 @@ function App() {
               </animated.div>
             )
         )}
-        <button onClick={handeleToggleLogin}>test</button>
       </div>
     </AuthProvider>
   );
