@@ -2,7 +2,7 @@
 const userFromLocalStorage = localStorage.getItem("User");
 const usersFromLocalStorage = localStorage.getItem("Users");
 
-export const initialState = {
+export const authInitialState = {
   // set the initial state if the user is in local storage
   user: userFromLocalStorage ? JSON.parse(userFromLocalStorage) : {},
   accounts: usersFromLocalStorage ? JSON.parse(usersFromLocalStorage) : [],

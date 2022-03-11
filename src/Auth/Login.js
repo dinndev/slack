@@ -4,6 +4,7 @@ import axios from "axios";
 import env from "react-dotenv";
 import { useAuthProvider } from "../States/AuthProvider";
 import { Alert, AlertIcon, Spinner } from "@chakra-ui/react";
+import { useNavigate, useLocation } from "react-router";
 
 export default function Login({
   toggleLogin,
@@ -21,6 +22,8 @@ export default function Login({
   const [onChangeEmail, setOnchangeEmail] = useState("");
   const [onChangePassword, setOnchangePassword] = useState("");
   const [error, setError] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // set the current user to local storage
   useEffect(() => {
@@ -52,6 +55,8 @@ export default function Login({
       // reset fields
       resetField("email");
       resetField("password");
+      // navigate to account when logged in
+      navigate("/account");
     } catch (error) {
       // set errors
       setIsloading(false);

@@ -1,13 +1,15 @@
-import Signup from "./Auth/Signup";
-import Login from "./Auth/Login";
 import { useState } from "react";
-import { useTransition, animated } from "react-spring";
+import { useTransition } from "react-spring";
 import AuthProvider from "./States/AuthProvider";
-import { initialState } from "./States/Reducers/AuthReducer";
+import { authInitialState } from "./States/Reducers/AuthReducer";
 import AuthReducer from "./States/Reducers/AuthReducer";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Auth from "./Auth/Auth";
+import Signup from "./Auth/Signup";
+import PrivateRoute from "./Auth/PrivateRoute";
 function App() {
-  const [toggleLogin, setToggleLogin] = useState(false);
-  const [isSignupOpen, setToggleSignup] = useState(true);
+  const [toggleLogin, setToggleLogin] = useState(true);
+  const [isSignupOpen, setToggleSignup] = useState(false);
   // Create transition for login
   const transtionLogin = useTransition(toggleLogin, {
     from: { x: -100, y: 0, opacity: 0 },
@@ -33,40 +35,36 @@ function App() {
     },
   });
   return (
-    <AuthProvider reducer={AuthReducer} initialState={initialState}>
-      <div className="w-full bg-gray-600">
-        {transtionLogin(
-          (style, item) =>
-            item && (
-              <animated.div
-                className="w-2/4 relative bg-white flex items-center justify-between flex-col h-screen"
-                style={style}
-              >
-                <Login
-                  setToggleSignup={setToggleSignup}
-                  toggleLogin
+    // Auth set up
+    <BrowserRouter>
+      <div className="w-full h-full bg-gray-600">
+        <AuthProvider reducer={AuthReducer} initialState={authInitialState}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Auth
+                  transtionLogin={transtionLogin}
+                  transtionSignup={transtionSignup}
+                  isSignupOpen={isSignupOpen}
                   setToggleLogin={setToggleLogin}
-                />
-              </animated.div>
-            )
-        )}
-        {transtionSignup(
-          (style, item) =>
-            item && (
-              <animated.div
-                className="w-3/5 relative bg-white flex items-center justify-between flex-col h-screen"
-                style={style}
-              >
-                <Signup
                   setToggleSignup={setToggleSignup}
-                  isSignupOpen
-                  setToggleLogin={setToggleLogin}
+                  toggleLogin={toggleLogin}
                 />
-              </animated.div>
-            )
-        )}
+              }
+            ></Route>
+            <Route
+              path="account"
+              element={
+                <PrivateRoute>
+                  {/* logged in account component here */}
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </AuthProvider>
       </div>
-    </AuthProvider>
+    </BrowserRouter>
   );
 }
 
