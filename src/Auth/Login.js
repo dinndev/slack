@@ -10,6 +10,7 @@ export default function Login({
   toggleLogin,
   setToggleLogin,
   setToggleSignup,
+  setCurrentUser
 }) {
   const {
     register,
@@ -39,22 +40,26 @@ export default function Login({
       setIsloading(true);
       let res = await axios
         .post(`${env.API_URL}/auth/sign_in`, userInfo)
-        .then(({ data }) => {
+        .then(( data ) => {
           // Spinner done when request completed
           setIsloading(false);
           setError("");
           return data;
         });
 
-      const user = res.data;
+      const user = res.data.data;
+      const responseHeader = res.headers
+      
       // set current user to state user
       dispatch({
         type: "SET_USER",
-        user: user,
+        user: Object.assign(user, responseHeader),
       });
+      
       // reset fields
       resetField("email");
       resetField("password");
+      setCurrentUser(Object.assign(user, responseHeader))
       // navigate to account when logged in
       navigate("/account");
     } catch (error) {
