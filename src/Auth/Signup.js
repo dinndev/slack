@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { svg } from "../Svg";
 import { useAuthProvider } from "../States/AuthProvider";
+import { Alert, AlertIcon, Spinner } from "@chakra-ui/react";
 import PasswordChecklist from "react-password-checklist";
 import env from "react-dotenv";
 import axios from "axios";
@@ -10,6 +11,8 @@ export default function Signup({ setToggleSignup, setToggleLogin }) {
   const [onChangePassword, setOnchangePassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [{ user, accounts }, dispatch] = useAuthProvider();
+  const [isLoading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const {
     register,
@@ -21,28 +24,48 @@ export default function Signup({ setToggleSignup, setToggleLogin }) {
     if (isPasswordValid) {
       // try if the input is valid
       try {
-        let res = await axios.post(`${env.API_URL}/auth`, {
-          email,
-          password,
-          nickname: userName,
-        });
+        // show the spinner
+        setLoading(true);
+        let res = await axios
+          .post(`${env.API_URL}/auth`, {
+            email,
+            password,
+            nickname: userName,
+          })
+          // hide the spinner when data is sent
+          .then(() => setLoading(false));
         // toggle the components
         setToggleLogin(true);
         setToggleSignup(false);
       } catch (err) {
-        console.log(err);
+        // hide the spinner when error
+        setLoading(false);
+        setMessage("User already exist");
       }
+    } else {
+      // set error when password is invalid format
+      setMessage("Invalid password format");
     }
   };
   const handleToggleLogin = (_) => {
     setToggleLogin(true);
     setToggleSignup(false);
   };
-  const checkUser = (user) => {
-    return accounts.some(({ email }) => email === user.email);
-  };
   return (
     <>
+      {message !== "" && onChangePassword !== "" ? (
+        <Alert status="error">
+          <AlertIcon />
+          {message}
+        </Alert>
+      ) : (
+        ""
+      )}
+      {isLoading && (
+        <div className="absolute w-full bg-white opacity-70 h-screen flex items-center justify-center">
+          <Spinner size="md" />
+        </div>
+      )}
       <div className="w-3/4 h-1/6 flex items-center">
         <h1 className="text-4xl ">Signup</h1>
       </div>
@@ -96,7 +119,7 @@ export default function Signup({ setToggleSignup, setToggleLogin }) {
         </div>
         <p className="my-14 text-xs text-gray-400">
           {" "}
-          Don't have an account?{" "}
+          Already have an account?{" "}
           <span
             onClick={handleToggleLogin}
             className="cursor-pointer font-bold  text-xs text-gray-500"
