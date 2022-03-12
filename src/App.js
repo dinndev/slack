@@ -69,7 +69,7 @@ function App() {
               element={
                 <PrivateRoute>
                   {/* logged in account component here */}
-                  <div className="flex flex-row border border-black h-screen">
+                  <div className="flex flex-row border border-black h-screen text-white">
                     <MenuBar/>
                     <SubMenu currentUser={currentUser}/>
                     <MessageArea currentUser={currentUser}/>
