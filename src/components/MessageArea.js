@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useContext, useState, useEffect} from "react";
+import React, {useContext, useState, useEffect, useCallback} from "react";
 import { MessageContext } from "../States/MessageContext";
 import MessageAreaHeader from "./MessageArea/MessageAreaHeader";
 import SendMessage from "./MessageArea/SendMessage";
@@ -8,10 +8,9 @@ const MessageArea = ({currentUser}) => {
     const {messageMode} = useContext(MessageContext);
     const [messages, setMessages] = useState([]);
 
-    // GET MESSAGES
-    useEffect(() => {
+    const myfunc = useCallback(async() => {
         if(currentUser != ''){
-            const responseBody = axios({
+            const responseBody = await axios({
                 baseURL: "http://206.189.91.54/api/v1",
                 url: '/messages',
                 method: 'get',
@@ -34,8 +33,18 @@ const MessageArea = ({currentUser}) => {
             })
             return responseBody;
         }
+    }, [messageMode, currentUser])
 
-    }, [messageMode, currentUser, messages])
+    // GET MESSAGES
+    useEffect(() => {
+        myfunc()
+    }, [myfunc])
+
+    useEffect(()=>{
+        const updateMessage = () => setInterval(myfunc, 5000);
+        updateMessage();
+        return () => clearInterval(updateMessage)
+    }, [])
 
     return (
         <div className="flex flex-col border border-black h-screen grow-16">
@@ -52,7 +61,7 @@ const MessageArea = ({currentUser}) => {
                 )}
                 </ul>
             </div>
-            <SendMessage currentUser={currentUser}/>
+            <SendMessage myfunc={myfunc} currentUser={currentUser}/>
         </div> 
     );
 

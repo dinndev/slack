@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { MessageContext } from "../../States/MessageContext";
 import axios from "axios";
 
-const SendMessage = ({currentUser}) => {
+const SendMessage = ({currentUser, myfunc}) => {
     const {messageMode} = useContext(MessageContext)
     const [messageToSend, setMessageToSend] = useState();
 
@@ -27,6 +27,7 @@ const SendMessage = ({currentUser}) => {
         axios.post('http://206.189.91.54/api/v1/messages', bodyContents, requestHeaders)
         .then((response) => {
             console.log("Success axios", response)
+            myfunc()
         }, (error)=> {
             console.log("Rejected", error)
         })
