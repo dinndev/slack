@@ -38,10 +38,10 @@ const SendMessage = ({myfunc}) => {
 
     
     return ( 
-        <div className="border border-black h-14 w-full">
+        <div className="border border-black h-17 w-full">
             SendMessage<br/>
             <form onSubmit={handleSubmit(sendMessage)}>
-                <textarea className="border border-black h-14"
+                <textarea className="border border-black h-12 text-black"
                  style={{width: "90%"}} 
                  placeholder={"Send message"} 
                  {...register("messageToSend", {
