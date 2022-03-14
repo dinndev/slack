@@ -71,8 +71,8 @@ function App() {
                   {/* logged in account component here */}
                   <div className="flex flex-row border border-black h-screen text-white">
                     <MenuBar/>
-                    <SubMenu currentUser={currentUser}/>
-                    <MessageArea currentUser={currentUser}/>
+                    <SubMenu/>
+                    <MessageArea/>
                     <ChannelDetails/>
                   </div>
                 </PrivateRoute>

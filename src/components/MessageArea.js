@@ -1,15 +1,17 @@
 import axios from "axios";
 import React, {useContext, useState, useEffect, useCallback} from "react";
 import { MessageContext } from "../States/MessageContext";
+import { useAuthProvider } from "../States/AuthProvider";
 import MessageAreaHeader from "./MessageArea/MessageAreaHeader";
 import SendMessage from "./MessageArea/SendMessage";
 
-const MessageArea = ({currentUser}) => {
+const MessageArea = () => {
+    const [{ user }] = useAuthProvider();
     const {messageMode} = useContext(MessageContext);
     const [messages, setMessages] = useState([]);
 
     const myfunc = useCallback(async() => {
-        if(currentUser != ''){
+        if(user != undefined){
             const responseBody = await axios({
                 baseURL: "http://206.189.91.54/api/v1",
                 url: '/messages',
@@ -19,10 +21,10 @@ const MessageArea = ({currentUser}) => {
                     receiver_class: messageMode.receiver_class
                 },
                 headers: {
-                    "expiry": currentUser.expiry,
-                    "uid": currentUser.uid,
-                    "access-token": currentUser["access-token"],
-                    "client": currentUser.client
+                    "expiry": user.expiry,
+                    "uid": user.uid,
+                    "access-token": user["access-token"],
+                    "client": user.client
                 }
             })
             .then((response)=>{
@@ -33,7 +35,7 @@ const MessageArea = ({currentUser}) => {
             })
             return responseBody;
         }
-    }, [messageMode, currentUser])
+    }, [messageMode, user])
 
     // GET MESSAGES
     useEffect(() => {
@@ -61,7 +63,7 @@ const MessageArea = ({currentUser}) => {
                 )}
                 </ul>
             </div>
-            <SendMessage myfunc={myfunc} currentUser={currentUser}/>
+            <SendMessage myfunc={myfunc}/>
         </div> 
     );
 

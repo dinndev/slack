@@ -59,7 +59,6 @@ export default function Login({
       // reset fields
       resetField("email");
       resetField("password");
-      setCurrentUser(Object.assign(user, responseHeader))
       // navigate to account when logged in
       navigate("/account");
     } catch (error) {

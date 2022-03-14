@@ -1,25 +1,25 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { Auth } from "../States/AuthProvider";
+import { useEffect, useState } from "react";
+import { useAuthProvider } from "../States/AuthProvider";
 import Channels from "./SubMenu/Channels";
 import DirectMessages from "./SubMenu/DirectMessages";
 
-const SubMenu = ({currentUser}) => {
-    // const {user} = useContext(Auth)
+const SubMenu = () => {
+    const [{ user }] = useAuthProvider();
     const [channels, setChannels] = useState([]);
 
     // GET LIST OF CHANNELS
     useEffect(async() => {
-        if(currentUser != ''){
+        if(user !== undefined){
             const responseBody = await axios({
                 url: "channels", 
                 baseURL: "http://206.189.91.54/api/v1/",
                 method: 'get',
                 headers: {
-                    expiry: currentUser.expiry,
-                    uid: currentUser.uid,
-                    "access-token": currentUser["access-token"],
-                    client: currentUser.client
+                    expiry: user.expiry,
+                    uid: user.uid,
+                    "access-token": user["access-token"],
+                    client: user.client
                 }
                 
             })
@@ -31,7 +31,7 @@ const SubMenu = ({currentUser}) => {
             return responseBody;
         }
 
-    }, [currentUser])
+    }, [user])
 
     return channels !== '' ? (
         <div className="border border-black h-screen grow-4">SubMenu<br/>
@@ -45,14 +45,14 @@ const SubMenu = ({currentUser}) => {
             {/* DISPLAY LIST OF CHANNELS */}
             <ul>
                 {channels && channels.map(channel => {
-                    return <Channels key={channel.id} channel={channel} currentUser={currentUser}/> 
+                    return <Channels key={channel.id} channel={channel}/> 
                 })}
                 <li>Add Channel</li>
             </ul>
             Direct Messages
             {/* DISPLAY LIST OF DIRECT MESSAGES */}
             <ul>
-                <DirectMessages currentUser={currentUser}/>
+                <DirectMessages/>
             </ul>
         </div>
     ):(

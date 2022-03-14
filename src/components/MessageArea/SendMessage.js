@@ -1,8 +1,10 @@
 import { useState, useContext } from "react";
 import { MessageContext } from "../../States/MessageContext";
+import { useAuthProvider } from "../../States/AuthProvider";
 import axios from "axios";
 
-const SendMessage = ({currentUser, myfunc}) => {
+const SendMessage = ({myfunc}) => {
+    const [{ user }] = useAuthProvider();
     const {messageMode} = useContext(MessageContext)
     const [messageToSend, setMessageToSend] = useState();
 
@@ -14,10 +16,10 @@ const SendMessage = ({currentUser, myfunc}) => {
 
     let requestHeaders = {
         headers: {
-        "expiry": currentUser.expiry,
-        "uid": currentUser.uid,
-        "access-token": currentUser["access-token"],
-        "client": currentUser.client
+        "expiry": user.expiry,
+        "uid": user.uid,
+        "access-token": user["access-token"],
+        "client": user.client
         }
     }
 

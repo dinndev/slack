@@ -7,6 +7,7 @@ export const MessageContext = createContext();
 
 const MessageContextPovider = (props) => {
     // const {user} = useContext(Auth)
+    // console.log("user: ",user);
     const [messageMode, dispatch] = useReducer(messageReducer, {
         receiver_id: 1735,
         receiver_class: 'User'
