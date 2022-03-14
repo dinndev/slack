@@ -10,7 +10,6 @@ export default function Login({
   toggleLogin,
   setToggleLogin,
   setToggleSignup,
-  setCurrentUser
 }) {
   const {
     register,
