@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { MessageContext } from "../../States/MessageContext";
 import { useAuthProvider } from "../../States/AuthProvider";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 
 const SendMessage = ({myfunc}) => {
@@ -8,23 +9,23 @@ const SendMessage = ({myfunc}) => {
     const {messageMode} = useContext(MessageContext)
     const [messageToSend, setMessageToSend] = useState();
 
-    let bodyContents = {
-        receiver_id: parseInt(messageMode["receiver_id"]),
-        receiver_class: messageMode["receiver_class"],
-        body: messageToSend
-    }
-
-    let requestHeaders = {
-        headers: {
-        "expiry": user.expiry,
-        "uid": user.uid,
-        "access-token": user["access-token"],
-        "client": user.client
+    const {register, handleSubmit} = useForm();
+    
+    const sendMessage = (data) =>{
+        let bodyContents = {
+            receiver_id: parseInt(messageMode["receiver_id"]),
+            receiver_class: messageMode["receiver_class"],
+            body: data.messageToSend
         }
-    }
-
-    const handleSubmit = (e) =>{
-        e.preventDefault();
+    
+        let requestHeaders = {
+            headers: {
+            "expiry": user.expiry,
+            "uid": user.uid,
+            "access-token": user["access-token"],
+            "client": user.client
+            }
+        }
 
         axios.post('http://206.189.91.54/api/v1/messages', bodyContents, requestHeaders)
         .then((response) => {
@@ -39,10 +40,16 @@ const SendMessage = ({myfunc}) => {
     return ( 
         <div className="border border-black h-14 w-full">
             SendMessage<br/>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(sendMessage)}>
                 <textarea className="border border-black h-14"
-                 style={{width: "90%"}} placeholder={"Send message"} 
-                onChange={(e)=>{setMessageToSend(e.target.value)}} value={messageToSend}/>
+                 style={{width: "90%"}} 
+                 placeholder={"Send message"} 
+                 {...register("messageToSend", {
+                     required: "true",
+                     onChange: (e)=> setMessageToSend(e.target.value) 
+                    })}
+                 value={messageToSend}/>
+
                 <button type="Submit">Send</button>
             </form>
         </div> 
