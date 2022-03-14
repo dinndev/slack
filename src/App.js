@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useTransition } from "react-spring";
 import AuthProvider from "./States/AuthProvider";
 import { authInitialState } from "./States/Reducers/AuthReducer";
@@ -7,9 +7,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "./Auth/Auth";
 import Signup from "./Auth/Signup";
 import PrivateRoute from "./Auth/PrivateRoute";
+import MenuBar from "./components/MenuBar"
+import SubMenu from "./components/SubMenu"
+import MessageArea from "./components/MessageArea"
+import ChannelDetails from "./components/ChannelDetails"
+import MessageContextPovider from "./States/MessageContext";
+
 function App() {
   const [toggleLogin, setToggleLogin] = useState(true);
   const [isSignupOpen, setToggleSignup] = useState(false);
+
   // Create transition for login
   const transtionLogin = useTransition(toggleLogin, {
     from: { x: -100, y: 0, opacity: 0 },
@@ -34,11 +41,13 @@ function App() {
       clamp: true,
     },
   });
+
   return (
     // Auth set up
     <BrowserRouter>
       <div className="w-full h-full bg-gray-600">
         <AuthProvider reducer={AuthReducer} initialState={authInitialState}>
+          <MessageContextPovider>
           <Routes>
             <Route
               path="/"
@@ -52,16 +61,23 @@ function App() {
                   toggleLogin={toggleLogin}
                 />
               }
-            ></Route>
+            />
             <Route
               path="account"
               element={
                 <PrivateRoute>
                   {/* logged in account component here */}
+                  <div className="flex flex-row border border-black h-screen text-white">
+                    <MenuBar/>
+                    <SubMenu />
+                    <MessageArea />
+                    <ChannelDetails/>
+                  </div>
                 </PrivateRoute>
               }
             />
           </Routes>
+          </MessageContextPovider>
         </AuthProvider>
       </div>
     </BrowserRouter>

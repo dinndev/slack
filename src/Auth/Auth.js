@@ -10,6 +10,7 @@ export default function Auth({
   setToggleSignup,
   isSignupOpen,
   toggleLogin,
+  setCurrentUser
 }) {
   return (
     <>
@@ -24,6 +25,7 @@ export default function Auth({
                 setToggleSignup={setToggleSignup}
                 toggleLogin={toggleLogin}
                 setToggleLogin={setToggleLogin}
+                setCurrentUser={setCurrentUser} 
               />
             </animated.div>
           )
