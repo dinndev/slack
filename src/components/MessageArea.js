@@ -35,18 +35,20 @@ const MessageArea = () => {
             })
             return responseBody;
         }
-    }, [messageMode, user])
+    }, [messageMode.receiver_id, user])
+
+    const updateMessage = () => setInterval(myfunc, 5000);
 
     // GET MESSAGES
     useEffect(() => {
         myfunc()
+        // clearInterval(updateMessage)
+        // updateMessage();
     }, [myfunc])
 
-    useEffect(()=>{
-        const updateMessage = () => setInterval(myfunc, 5000);
-        updateMessage();
-        return () => clearInterval(updateMessage)
-    }, [])
+    // useEffect(()=>{
+    //     updateMessage();
+    // }, [])
 
     return (
         <div className="flex flex-col border border-black h-screen grow-16">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useTransition } from "react-spring";
 import AuthProvider from "./States/AuthProvider";
 import { authInitialState } from "./States/Reducers/AuthReducer";
@@ -16,7 +16,6 @@ import MessageContextPovider from "./States/MessageContext";
 function App() {
   const [toggleLogin, setToggleLogin] = useState(true);
   const [isSignupOpen, setToggleSignup] = useState(false);
-  const [currentUser, setCurrentUser] = useState('')
 
   // Create transition for login
   const transtionLogin = useTransition(toggleLogin, {
@@ -42,6 +41,7 @@ function App() {
       clamp: true,
     },
   });
+
   return (
     // Auth set up
     <BrowserRouter>
@@ -59,8 +59,6 @@ function App() {
                   setToggleLogin={setToggleLogin}
                   setToggleSignup={setToggleSignup}
                   toggleLogin={toggleLogin}
-                  setCurrentUser={setCurrentUser} 
-                  currentUser={currentUser}
                 />
               }
             />
@@ -71,8 +69,8 @@ function App() {
                   {/* logged in account component here */}
                   <div className="flex flex-row border border-black h-screen text-white">
                     <MenuBar/>
-                    <SubMenu/>
-                    <MessageArea/>
+                    <SubMenu />
+                    <MessageArea />
                     <ChannelDetails/>
                   </div>
                 </PrivateRoute>
