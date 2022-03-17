@@ -56,7 +56,7 @@ const DirectMessages = () => {
     return messengers.length !== 0 ? (
         messengers.map((messenger)=>{
             return (
-                <li className={`w-fit cursor-pointer ${messenger.email == messageMode.name ? "font-bold": ""}`} key={messenger.id} id={messenger.id} onClick={handleClick}>{messenger.email}</li>
+                <li className={`w-fit px-4 cursor-pointer rounded-md ${messenger.email == messageMode.name ? "font-bold bg-gray-400 text-zinc-700": ""}`} key={messenger.id} id={messenger.id} onClick={handleClick}>{messenger.email}</li>
             )
         })
     ) : (
