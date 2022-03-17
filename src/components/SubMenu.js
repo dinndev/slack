@@ -4,7 +4,7 @@ import { useAuthProvider } from "../States/AuthProvider";
 import Channels from "./SubMenu/Channels";
 import DirectMessages from "./SubMenu/DirectMessages";
 
-const SubMenu = () => {
+const SubMenu = ({showSubMenu}) => {
     const [{ user }] = useAuthProvider();
     const [channels, setChannels] = useState([]);
     const [showChannels, setShowChannels] = useState(true)
@@ -50,9 +50,9 @@ const SubMenu = () => {
     }
 
     return channels !== '' ? (
-        <div className="h-screen grow-4 bg-gray-600 p-4 select-none">
-            <div className="border-2 border-white p-5 mb-3 rounded-md">
-
+        <div className={`h-screen grow-4 bg-gray-600 p-4 select-none ${showSubMenu ? "block": "hidden"}`}>
+            <div className="py-3 mb-3 flex justify-between border-b-2 border-gray-400">
+                <div className="text-xl font-bold">{user.email}</div><button>compose</button> 
             </div>
             <ul className="mb-2">
                 <li>Threads</li>
