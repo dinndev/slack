@@ -12,7 +12,8 @@ module.exports = {
         userMessage: "#3978ff",
         primary: "#27292b",
         dark: "#171a1a",
-        senderMessage: "#27292b"
+        senderMessage: "#27292b",
+        
       }
     },
   },

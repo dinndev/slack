@@ -7,6 +7,7 @@ const DirectMessages = () => {
     const [{ user }] = useAuthProvider();
     const {dispatch} = useContext(MessageContext);
     const [messengers, setMessengers] = useState('')
+    const {messageMode} = useContext(MessageContext);
 
     useEffect(() => {
         if(user !== undefined){
@@ -42,14 +43,20 @@ const DirectMessages = () => {
 
     }, [user])
 
+    useEffect(()=>{
+        if(messengers !== ''){
+            console.log("messengers: ", messengers)
+        }
+    }, [messengers])
+
     const handleClick = (e) => {
-        dispatch({type: 'SET_MESSAGE_TYPE', user: {"receiver_id": e.target.id, "receiver_class": 'User'}})
+        dispatch({type: 'SET_MESSAGE_TYPE', user: {"receiver_id": e.target.id, "receiver_class": 'User', "name": e.target.innerText}})
     }
 
     return messengers.length !== 0 ? (
         messengers.map((messenger)=>{
             return (
-                <li className="w-fit" key={messenger.id} id={messenger.id} onClick={handleClick}>{messenger.email}</li>
+                <li className={`w-fit cursor-pointer ${messenger.email == messageMode.name ? "font-bold": ""}`} key={messenger.id} id={messenger.id} onClick={handleClick}>{messenger.email}</li>
             )
         })
     ) : (

@@ -33,8 +33,14 @@ const SubMenu = () => {
 
     }, [user])
 
+    useEffect(()=>{
+        if(channels !== []){
+            console.log("channels: ", channels);
+        }
+    }, [channels])
+
     return channels !== '' ? (
-        <div className="h-screen grow-4 bg-dark p-4">SubMenu<br/>
+        <div className="h-screen grow-4 bg-gray-600 p-4">SubMenu<br/>
             <ul>
                 <li>Threads</li>
                 <li>Mentions & reactions</li>

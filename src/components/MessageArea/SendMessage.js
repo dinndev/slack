@@ -38,18 +38,25 @@ const SendMessage = ({myfunc}) => {
 
     
     return ( 
-        <div className="h-17 w-full bg-dark p-4">
+        <div className="h-17 w-full bg-gray-700 p-4">
             <form onSubmit={handleSubmit(sendMessage)}>
-                <textarea className="border border-black h-12 text-black "
-                 style={{width: "90%"}} 
-                 placeholder={"Send message"} 
-                 {...register("messageToSend", {
-                     required: "true",
-                     onChange: (e)=> setMessageToSend(e.target.value) 
-                    })}
-                 value={messageToSend}/>
+                {/* mt-4 bg-gray-100 border outline-none rounded-md p-3 w-full */}
+                <div className="flex flex-row">
+                    <div className="w-full">
+                        <textarea className="mt-4 bg-gray-100 border outline-none rounded-md p-3 text-black w-full"
+                        style={{width: "90%"}} 
+                        placeholder={"Send message"} 
+                        {...register("messageToSend", {
+                            required: "true",
+                            onChange: (e)=> setMessageToSend(e.target.value) 
+                            })}
+                        value={messageToSend}/>
+                    </div>
+                    <div>
+                        <button className="mt-4 rounded-md text-xs bg-gray-400 text-white w-fit px-5 py-3" type="Submit">Send</button>
+                    </div>
+                </div>
 
-                <button type="Submit">Send</button>
             </form>
         </div> 
     );

@@ -1,6 +1,6 @@
 const MenuBar = () => {
     return ( 
-        <div className="h-screen grow-2 bg-primary ">
+        <div className="h-screen grow-2 bg-gray-700 ">
             MenuBar
         </div>
     );
