@@ -7,7 +7,7 @@ const Channels = ({channel}) => {
         dispatch({type: 'SET_MESSAGE_TYPE', user: {"receiver_id": e.target.id, "receiver_class": 'Channel'}})
     }
     return ( 
-        <li key={channel.id} id={channel.id} onClick={handleClick}>{channel.name}</li>
+        <li className="w-fit" key={channel.id} id={channel.id} onClick={handleClick}>{channel.name}</li>
     );
 }
  

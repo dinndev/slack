@@ -49,11 +49,11 @@ const DirectMessages = () => {
     return messengers.length !== 0 ? (
         messengers.map((messenger)=>{
             return (
-                <li key={messenger.id} id={messenger.id} onClick={handleClick}>{messenger.email}</li>
+                <li className="w-fit" key={messenger.id} id={messenger.id} onClick={handleClick}>{messenger.email}</li>
             )
         })
     ) : (
-        <li>DirectMessages</li>
+        <li className="w-fit">DirectMessages</li>
     )
 }
  
