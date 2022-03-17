@@ -4,6 +4,7 @@ import { MessageContext } from "../States/MessageContext";
 import { useAuthProvider } from "../States/AuthProvider";
 import MessageAreaHeader from "./MessageArea/MessageAreaHeader";
 import SendMessage from "./MessageArea/SendMessage";
+import MessageDisplay from "./MessageArea/MessageDisplay";
 
 const MessageArea = () => {
     const [{ user }] = useAuthProvider();
@@ -51,19 +52,20 @@ const MessageArea = () => {
     // }, [])
 
     return (
-        <div className="flex flex-col border border-black h-screen grow-16">
+        <div className="flex flex-col h-screen grow-16">
             <MessageAreaHeader/>
             {/* DISPLAY MESSAGES */}
-            <div className="border border-black grow-16">
-                <ul>
+            <div className="grow-16 overflow-y-scroll bg-messageArea">
+                <div className="flex flex-col bg-messageArea p-2 h-fit">
                 {(messages !== undefined) || (messages.length != 0 ) ? (
-                messages.map((message)=>{
-                    return <li key={Math.random()}>{message.body}</li>
+                messages.map((message, index)=>{
+                    // return <li key={Math.random()}>{message.body}</li>
+                    return (<MessageDisplay key={Math.random()} message={message} ></MessageDisplay>)
                     })
                 ) : (
                     <div>MessageDisplay</div>
                 )}
-                </ul>
+                </div>
             </div>
             <SendMessage myfunc={myfunc}/>
         </div> 
