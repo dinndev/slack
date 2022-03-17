@@ -37,34 +37,34 @@ const SubMenu = () => {
       toggleCreateMode: true,
     });
   };
-  return channels !== "" ? (
-    <div className="border border-black h-screen grow-4">
-      SubMenu
-      <br />
-      <ul>
-        <li>Threads</li>
-        <li>Mentions & reactions</li>
-        <li>Drafts</li>
-        <button onClick={handleToggleCreateChanel}>Create channel</button>
-      </ul>
-      Channels
-      {/* DISPLAY LIST OF CHANNELS */}
-      <ul>
-        {channels &&
-          channels.map((channel) => {
-            return <Channels key={channel.id} channel={channel} />;
-          })}
-      </ul>
-      Direct Messages
-      {/* DISPLAY LIST OF DIRECT MESSAGES */}
-      <ul>
-        <DirectMessages />
-      </ul>
-    </div>
-  ) : (
-    <div className="border border-black h-screen grow-4">SubMenu</div>
-  );
-};
+//   return channels !== "" ? (
+//     <div className="border border-black h-screen grow-4">
+//       SubMenu
+//       <br />
+//       <ul>
+//         <li>Threads</li>
+//         <li>Mentions & reactions</li>
+//         <li>Drafts</li>
+//         <button onClick={handleToggleCreateChanel}>Create channel</button>
+//       </ul>
+//       Channels
+//       {/* DISPLAY LIST OF CHANNELS */}
+//       <ul>
+//         {channels &&
+//           channels.map((channel) => {
+//             return <Channels key={channel.id} channel={channel} />;
+//           })}
+//       </ul>
+//       Direct Messages
+//       {/* DISPLAY LIST OF DIRECT MESSAGES */}
+//       <ul>
+//         <DirectMessages />
+//       </ul>
+//     </div>
+//   ) : (
+//     <div className="border border-black h-screen grow-4">SubMenu</div>
+//   );
+// };
 
 
 
@@ -82,7 +82,8 @@ const SubMenu = () => {
                 {channels && channels.map(channel => {
                     return <Channels key={channel.id} channel={channel}/> 
                 })}
-                <li className="w-fit ml-5">Add Channel</li>
+                {/* <li className="w-fit ml-5">Add Channel</li> */}
+                <button className="w-fit ml-5" onClick={handleToggleCreateChanel}>Add Channel</button>
             </ul>
             <span className="text-gray-500 font-bold">Direct Messages</span>
             {/* DISPLAY LIST OF DIRECT MESSAGES */}
