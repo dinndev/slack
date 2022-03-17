@@ -4,12 +4,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./Style/style.css";
 import { ChakraProvider } from "@chakra-ui/react";
+import CreateChannelProvider from "./States/Reducers/CreateChannelProvider";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider>
+    <CreateChannelProvider>
+      <ChakraProvider>
         <App />
-    </ChakraProvider>
+      </ChakraProvider>
+    </CreateChannelProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -5,17 +5,20 @@ import { authInitialState } from "./States/Reducers/AuthReducer";
 import AuthReducer from "./States/Reducers/AuthReducer";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "./Auth/Auth";
-import Signup from "./Auth/Signup";
+import { Alert, AlertIcon, Spinner } from "@chakra-ui/react";
 import PrivateRoute from "./Auth/PrivateRoute";
-import MenuBar from "./components/MenuBar"
-import SubMenu from "./components/SubMenu"
-import MessageArea from "./components/MessageArea"
-import ChannelDetails from "./components/ChannelDetails"
+import MenuBar from "./components/MenuBar";
+import SubMenu from "./components/SubMenu";
+import MessageArea from "./components/MessageArea";
+import ChannelDetails from "./components/ChannelDetails";
 import MessageContextPovider from "./States/MessageContext";
+import CreateChannel from "./components/SubMenu/CreateChannel";
+import { useCreateChannelProvider } from "./States/Reducers/CreateChannelProvider";
 
 function App() {
   const [toggleLogin, setToggleLogin] = useState(true);
   const [isSignupOpen, setToggleSignup] = useState(false);
+  const [{ isCreateMode, error }, dispatch] = useCreateChannelProvider();
 
   // Create transition for login
   const transtionLogin = useTransition(toggleLogin, {
@@ -48,35 +51,44 @@ function App() {
       <div className="w-full h-full bg-gray-600">
         <AuthProvider reducer={AuthReducer} initialState={authInitialState}>
           <MessageContextPovider>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Auth
-                  transtionLogin={transtionLogin}
-                  transtionSignup={transtionSignup}
-                  isSignupOpen={isSignupOpen}
-                  setToggleLogin={setToggleLogin}
-                  setToggleSignup={setToggleSignup}
-                  toggleLogin={toggleLogin}
-                />
-              }
-            />
-            <Route
-              path="account"
-              element={
-                <PrivateRoute>
-                  {/* logged in account component here */}
-                  <div className="flex flex-row border border-black h-screen text-white">
-                    <MenuBar/>
-                    <SubMenu />
-                    <MessageArea />
-                    <ChannelDetails/>
-                  </div>
-                </PrivateRoute>
-              }
-            />
-          </Routes>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Auth
+                    transtionLogin={transtionLogin}
+                    transtionSignup={transtionSignup}
+                    isSignupOpen={isSignupOpen}
+                    setToggleLogin={setToggleLogin}
+                    setToggleSignup={setToggleSignup}
+                    toggleLogin={toggleLogin}
+                  />
+                }
+              />
+              <Route
+                path="account"
+                element={
+                  <PrivateRoute>
+                    {/* logged in account component here */}
+                    <div className="flex flex-row border border-black h-screen text-white">
+                      {error !== "" && (
+                        <div className="absolute right-0  left-0 ml-auto mr-auto">
+                          <Alert status="error">
+                            <AlertIcon />
+                            {`channel ${error}`}
+                          </Alert>
+                        </div>
+                      )}
+                      <MenuBar />
+                      <SubMenu />
+                      <MessageArea />
+                      <ChannelDetails />
+                      {isCreateMode && <CreateChannel />}
+                    </div>
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
           </MessageContextPovider>
         </AuthProvider>
       </div>
