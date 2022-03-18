@@ -5,10 +5,13 @@ import Channels from "./SubMenu/Channels";
 import DirectMessages from "./SubMenu/DirectMessages";
 import CreateChannel from "./SubMenu/CreateChannel";
 import { useCreateChannelProvider } from "../States/Reducers/CreateChannelProvider";
-const SubMenu = () => {
+          
+const SubMenu = ({showSubMenu}) => {
   const [{ user }] = useAuthProvider();
   const [channels, setChannels] = useState([]);
   const [{ channelDescription }, dispatch] = useCreateChannelProvider();
+  const [showChannels, setShowChannels] = useState(true)
+  const [showDirectMessageList, setShowDirectMessageList] = useState(true)
 
   // GET LIST OF CHANNELS
   useEffect(async () => {
@@ -38,26 +41,43 @@ const SubMenu = () => {
     });
   };
 
+    useEffect(()=>{
+        if(channels !== []){
+            console.log("channels: ", channels);
+        }
+    }, [channels])
+
+    const toggleChannels = () =>{
+        setShowChannels(!showChannels);
+    }
+    
+    const toggleDirectMessageList = () =>{
+        setShowDirectMessageList(!showDirectMessageList);
+    }
+
     return channels !== '' ? (
-        <div className="h-screen grow-4 bg-dark p-4">SubMenu<br/>
-            <ul>
+        <div className={`h-screen grow-4 bg-gray-600 p-4 select-none ${showSubMenu ? "block": "hidden"}`}>
+            <div className="py-3 mb-3 flex justify-between border-b-2 border-gray-400">
+                <div className="text-xl font-bold">{user.email}</div><button>compose</button> 
+            </div>
+            <ul className="mb-2">
                 <li>Threads</li>
                 <li>Mentions & reactions</li>
                 <li>Drafts</li>
                 <li>More</li>
             </ul>
-            <span className="text-gray-500 font-bold">Channels</span> 
+            <span className="cursor-pointer w-full block text-gray-400 font-bold" onClick={toggleChannels}>Channels</span> 
             {/* DISPLAY LIST OF CHANNELS */}
-            <ul className="ml-4 h-fit w-fit">
+            <ul className={`h-fit w-full mb-2 ${showChannels == true ? "block" : "hidden"}`}>
                 {channels && channels.map(channel => {
                     return <Channels key={channel.id} channel={channel}/> 
                 })}
                 {/* <li className="w-fit ml-5">Add Channel</li> */}
                 <button className="w-fit ml-5" onClick={handleToggleCreateChanel}>Add Channel</button>
             </ul>
-            <span className="text-gray-500 font-bold">Direct Messages</span>
+            <span className="cursor-pointer w-full block text-gray-400 font-bold" onClick={toggleDirectMessageList}>Direct Messages</span>
             {/* DISPLAY LIST OF DIRECT MESSAGES */}
-            <ul className="ml-4 w-fit">
+            <ul className={`w-fit ${showDirectMessageList == true ? "block" : "hidden"}`}>
                 <DirectMessages/>
             </ul>
         </div>

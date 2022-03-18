@@ -18,7 +18,9 @@ import { useCreateChannelProvider } from "./States/Reducers/CreateChannelProvide
 function App() {
   const [toggleLogin, setToggleLogin] = useState(true);
   const [isSignupOpen, setToggleSignup] = useState(false);
+  const [showSubMenu, setShowSubMenu] = useState(true);
   const [{ isCreateMode, error }, dispatch] = useCreateChannelProvider();
+
 
   // Create transition for login
   const transtionLogin = useTransition(toggleLogin, {
@@ -44,6 +46,10 @@ function App() {
       clamp: true,
     },
   });
+
+  const toggleSubMenu = () =>{
+    setShowSubMenu(!showSubMenu);
+  }
 
   return (
     // Auth set up
@@ -80,8 +86,8 @@ function App() {
                         </div>
                       )}
                       <MenuBar />
-                      <SubMenu />
-                      <MessageArea />
+                      <SubMenu showSubMenu={showSubMenu}/>
+                      <MessageArea toggleSubMenu={toggleSubMenu}/>
                       <ChannelDetails />
                       {isCreateMode && <CreateChannel />}
                     </div>

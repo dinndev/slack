@@ -7,7 +7,7 @@ const MessageDisplay = ({message}) => {
             {message.body}
         </div>
     ):(
-        <div className="border-2 border-senderMessage text-white inline-block self-start p-3 m-1 rounded-r-lg rounded-tl-lg bg-senderMessage">
+        <div className="border-2 border-gray-700 text-white inline-block self-start p-3 m-1 rounded-r-lg rounded-tl-lg bg-gray-700">
             {message.body}
         </div>
     )

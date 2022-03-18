@@ -6,7 +6,7 @@ import MessageAreaHeader from "./MessageArea/MessageAreaHeader";
 import SendMessage from "./MessageArea/SendMessage";
 import MessageDisplay from "./MessageArea/MessageDisplay";
 
-const MessageArea = () => {
+const MessageArea = ({toggleSubMenu}) => {
     const [{ user }] = useAuthProvider();
     const {messageMode} = useContext(MessageContext);
     const [messages, setMessages] = useState([]);
@@ -53,14 +53,13 @@ const MessageArea = () => {
 
     return (
         <div className="flex flex-col h-screen grow-16">
-            <MessageAreaHeader/>
+            <MessageAreaHeader toggleSubMenu={toggleSubMenu}/>
             {/* DISPLAY MESSAGES */}
-            <div className="grow-16 overflow-y-scroll bg-messageArea">
-                <div className="flex flex-col bg-messageArea p-2 h-fit">
+            <div className="grow-16 overflow-y-scroll bg-gray-100">
+                <div className="flex flex-col bg-gray-100 p-2 h-fit">
                 {(messages !== undefined) || (messages.length != 0 ) ? (
                 messages.map((message, index)=>{
-                    // return <li key={Math.random()}>{message.body}</li>
-                    return (<MessageDisplay key={Math.random()} message={message} ></MessageDisplay>)
+                    return (<MessageDisplay key={Math.random()} message={message}></MessageDisplay>)
                     })
                 ) : (
                     <div>MessageDisplay</div>
