@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import { MessageContext } from "../../States/MessageContext";
 import { useAuthProvider } from "../../States/AuthProvider";
 import axios from "axios";
+import env from "react-dotenv";
 
 const DirectMessages = () => {
     const [{ user }] = useAuthProvider();
@@ -13,7 +14,7 @@ const DirectMessages = () => {
         if(user !== undefined){
             const responseBody = axios({
                 url: "/messages",
-                baseURL: "http://206.189.91.54/api/v1",
+                baseURL: `${env.API_URL}`,
                 method: 'get',
                 params: {
                     receiver_id: 1735,
