@@ -31,6 +31,7 @@ const SendMessage = ({myfunc}) => {
         axios.post(`${env.API_URL}/messages`, bodyContents, requestHeaders)
         .then((response) => {
             console.log("Success axios", response)
+            setMessageToSend("")
             myfunc()
         }, (error)=> {
             console.log("Rejected", error)
@@ -44,8 +45,7 @@ const SendMessage = ({myfunc}) => {
                 {/* mt-4 bg-gray-100 border outline-none rounded-md p-3 w-full */}
                 <div className="flex flex-row">
                     <div className="w-full">
-                        <textarea className="mt-4 bg-gray-100 border outline-none rounded-md p-3 text-black w-full"
-                        style={{width: "99%"}} 
+                        <textarea className="mt-4 bg-gray-100 border outline-none rounded-md p-3 text-black w-99 "
                         placeholder={"Send message"} 
                         {...register("messageToSend", {
                             required: "true",
