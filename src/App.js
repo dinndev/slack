@@ -81,7 +81,7 @@ function App() {
                 element={
                   <PrivateRoute>
                     {/* logged in account component here */}
-                    <div className="flex flex-row h-screen text-white">
+                    <div className="flex flex-row h-screen text-white select-none">
                       {error !== "" && (
                         <div className="absolute right-0  left-0 ml-auto mr-auto">
                           <Alert status="error">
