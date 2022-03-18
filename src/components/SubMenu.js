@@ -5,6 +5,9 @@ import Channels from "./SubMenu/Channels";
 import DirectMessages from "./SubMenu/DirectMessages";
 import CreateChannel from "./SubMenu/CreateChannel";
 import { useCreateChannelProvider } from "../States/Reducers/CreateChannelProvider";
+import { GoTriangleDown, GoTriangleRight, GoPlus } from "react-icons/go";
+import { FiEdit } from "react-icons/fi";
+import { AiOutlinePlusCircle } from "react-icons/ai";
           
 const SubMenu = ({showSubMenu}) => {
   const [{ user }] = useAuthProvider();
@@ -58,7 +61,7 @@ const SubMenu = ({showSubMenu}) => {
     return channels !== '' ? (
         <div className={`h-screen grow-4 bg-gray-600 p-4 select-none ${showSubMenu ? "block": "hidden"}`}>
             <div className="py-3 mb-3 flex justify-between border-b-2 border-gray-400">
-                <div className="text-xl font-bold">{user.email}</div><button>compose</button> 
+                <div className="text-xl font-bold">{user.email}</div><button><FiEdit className="text-xl"/></button> 
             </div>
             <ul className="mb-2">
                 <li>Threads</li>
@@ -66,16 +69,23 @@ const SubMenu = ({showSubMenu}) => {
                 <li>Drafts</li>
                 <li>More</li>
             </ul>
-            <span className="cursor-pointer w-full block text-gray-400 font-bold" onClick={toggleChannels}>Channels</span> 
+            <span className="cursor-pointer w-full block text-gray-400 font-bold" onClick={toggleChannels}>
+              {showChannels ? <GoTriangleDown className="inline"/> : <GoTriangleRight className="inline"/> }
+                Channels
+              </span> 
             {/* DISPLAY LIST OF CHANNELS */}
             <ul className={`h-fit w-full mb-2 ${showChannels == true ? "block" : "hidden"}`}>
                 {channels && channels.map(channel => {
                     return <Channels key={channel.id} channel={channel}/> 
                 })}
-                {/* <li className="w-fit ml-5">Add Channel</li> */}
-                <button className="w-fit ml-5" onClick={handleToggleCreateChanel}>Add Channel</button>
+                <button className="w-fit ml-5" onClick={handleToggleCreateChanel}>
+                  <AiOutlinePlusCircle className="inline mb-1 mr-1"/>
+                  Add Channel
+                </button>
             </ul>
-            <span className="cursor-pointer w-full block text-gray-400 font-bold" onClick={toggleDirectMessageList}>Direct Messages</span>
+            <span className="cursor-pointer w-full block text-gray-400 font-bold" onClick={toggleDirectMessageList}>
+              {showDirectMessageList ? <GoTriangleDown className="inline"/> : <GoTriangleRight className="inline"/> }
+              Direct Messages</span>
             {/* DISPLAY LIST OF DIRECT MESSAGES */}
             <ul className={`w-fit ${showDirectMessageList == true ? "block" : "hidden"}`}>
                 <DirectMessages/>

@@ -19,6 +19,7 @@ function App() {
   const [toggleLogin, setToggleLogin] = useState(true);
   const [isSignupOpen, setToggleSignup] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(true);
+  const [showChannelDetails, setShowChannelDetails] = useState(true);
   const [{ isCreateMode, error }, dispatch] = useCreateChannelProvider();
 
 
@@ -49,6 +50,10 @@ function App() {
 
   const toggleSubMenu = () =>{
     setShowSubMenu(!showSubMenu);
+  }
+
+  const toggleChannelDetails = () =>{
+    setShowChannelDetails(!showChannelDetails);
   }
 
   return (
@@ -87,8 +92,8 @@ function App() {
                       )}
                       <MenuBar />
                       <SubMenu showSubMenu={showSubMenu}/>
-                      <MessageArea toggleSubMenu={toggleSubMenu}/>
-                      <ChannelDetails />
+                      <MessageArea toggleSubMenu={toggleSubMenu} toggleChannelDetails={toggleChannelDetails}/>
+                      <ChannelDetails showChannelDetails={showChannelDetails}/>
                       {isCreateMode && <CreateChannel />}
                     </div>
                   </PrivateRoute>
