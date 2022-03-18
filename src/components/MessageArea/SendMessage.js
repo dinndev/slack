@@ -31,6 +31,7 @@ const SendMessage = ({myfunc}) => {
         axios.post(`${env.API_URL}/messages`, bodyContents, requestHeaders)
         .then((response) => {
             console.log("Success axios", response)
+            setMessageToSend("")
             myfunc()
         }, (error)=> {
             console.log("Rejected", error)
