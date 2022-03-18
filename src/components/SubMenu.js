@@ -5,7 +5,7 @@ import Channels from "./SubMenu/Channels";
 import DirectMessages from "./SubMenu/DirectMessages";
 import CreateChannel from "./SubMenu/CreateChannel";
 import { useCreateChannelProvider } from "../States/Reducers/CreateChannelProvider";
-import { GoTriangleDown, GoTriangleRight, GoPlus } from "react-icons/go";
+import { GoTriangleDown, GoTriangleRight } from "react-icons/go";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import env from "react-dotenv";
@@ -63,7 +63,8 @@ const SubMenu = ({showSubMenu}) => {
     return channels !== '' ? (
         <div className={`h-screen grow-4 bg-gray-600 p-4 select-none ${showSubMenu ? "block": "hidden"}`}>
             <div className="py-3 mb-3 flex justify-between border-b-2 border-gray-400">
-                <div className="text-xl font-bold">{user.email}</div><button><FiEdit className="text-xl"/></button> 
+                <div className="text-xl font-bold">{user.email}</div>
+                <button><FiEdit className="text-xl"/></button> 
             </div>
             <ul className="mb-2">
                 <li>Threads</li>
@@ -87,7 +88,8 @@ const SubMenu = ({showSubMenu}) => {
             </ul>
             <span className="cursor-pointer w-full block text-gray-400 font-bold" onClick={toggleDirectMessageList}>
               {showDirectMessageList ? <GoTriangleDown className="inline"/> : <GoTriangleRight className="inline"/> }
-              Direct Messages</span>
+              Direct Messages
+            </span>
             {/* DISPLAY LIST OF DIRECT MESSAGES */}
             <ul className={`w-fit ${showDirectMessageList == true ? "block" : "hidden"}`}>
                 <DirectMessages/>

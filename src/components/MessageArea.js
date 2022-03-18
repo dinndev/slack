@@ -35,6 +35,8 @@ const MessageArea = ({toggleSubMenu, toggleChannelDetails}) => {
             }, (error) => {
                 console.log(error);
             })
+            var messageWindow = document.querySelector("#messageWindow");
+            messageWindow.scrollTop = messageWindow.scrollHeight;
             return responseBody;
         }
     }, [messageMode.receiver_id, user])
@@ -56,7 +58,7 @@ const MessageArea = ({toggleSubMenu, toggleChannelDetails}) => {
         <div className="flex flex-col h-screen grow-16">
             <MessageAreaHeader toggleSubMenu={toggleSubMenu} toggleChannelDetails={toggleChannelDetails}/>
             {/* DISPLAY MESSAGES */}
-            <div className="grow-16 overflow-y-scroll bg-gray-100">
+            <div className="grow-16 overflow-y-scroll bg-gray-100" id="messageWindow">
                 <div className="flex flex-col bg-gray-100 p-2 h-fit">
                 {(messages !== undefined) || (messages.length != 0 ) ? (
                 messages.map((message, index)=>{
