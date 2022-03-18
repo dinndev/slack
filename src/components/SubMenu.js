@@ -3,37 +3,43 @@ import { useEffect, useState } from "react";
 import { useAuthProvider } from "../States/AuthProvider";
 import Channels from "./SubMenu/Channels";
 import DirectMessages from "./SubMenu/DirectMessages";
-
+import CreateChannel from "./SubMenu/CreateChannel";
+import { useCreateChannelProvider } from "../States/Reducers/CreateChannelProvider";
+          
 const SubMenu = ({showSubMenu}) => {
-    const [{ user }] = useAuthProvider();
-    const [channels, setChannels] = useState([]);
-    const [showChannels, setShowChannels] = useState(true)
-    const [showDirectMessageList, setShowDirectMessageList] = useState(true)
+  const [{ user }] = useAuthProvider();
+  const [channels, setChannels] = useState([]);
+  const [{ channelDescription }, dispatch] = useCreateChannelProvider();
+  const [showChannels, setShowChannels] = useState(true)
+  const [showDirectMessageList, setShowDirectMessageList] = useState(true)
 
-    // GET LIST OF CHANNELS
-    useEffect(async() => {
-        if(user !== undefined){
-            const responseBody = await axios({
-                url: "channels", 
-                baseURL: "http://206.189.91.54/api/v1/",
-                method: 'get',
-                headers: {
-                    expiry: user.expiry,
-                    uid: user.uid,
-                    "access-token": user["access-token"],
-                    client: user.client
-                }
-                
-            })
-            .then((response) => {
-                setChannels(response.data.data);
-                return response;
-            })
+  // GET LIST OF CHANNELS
+  useEffect(async () => {
+    if (user !== undefined) {
+      const responseBody = await axios({
+        url: "channels",
+        baseURL: "http://206.189.91.54/api/v1/",
+        method: "get",
+        headers: {
+          expiry: user.expiry,
+          uid: user.uid,
+          "access-token": user["access-token"],
+          client: user.client,
+        },
+      }).then((response) => {
+        setChannels(response.data.data);
+        return response;
+      });
+      return responseBody;
+    }
+  }, [user, channelDescription]);
 
-            return responseBody;
-        }
-
-    }, [user])
+  const handleToggleCreateChanel = (_) => {
+    dispatch({
+      type: "SET_CREATE_MODE",
+      toggleCreateMode: true,
+    });
+  };
 
     useEffect(()=>{
         if(channels !== []){
@@ -66,7 +72,8 @@ const SubMenu = ({showSubMenu}) => {
                 {channels && channels.map(channel => {
                     return <Channels key={channel.id} channel={channel}/> 
                 })}
-                <li className="w-fit ml-5">Add Channel</li>
+                {/* <li className="w-fit ml-5">Add Channel</li> */}
+                <button className="w-fit ml-5" onClick={handleToggleCreateChanel}>Add Channel</button>
             </ul>
             <span className="cursor-pointer w-full block text-gray-400 font-bold" onClick={toggleDirectMessageList}>Direct Messages</span>
             {/* DISPLAY LIST OF DIRECT MESSAGES */}
