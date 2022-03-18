@@ -5,7 +5,6 @@ const Channels = ({channel}) => {
     const {dispatch} = useContext(MessageContext)
     const {messageMode} = useContext(MessageContext);
     const handleClick = (e) => {
-        console.log("target value: ", e.target.innerText)
         dispatch({type: 'SET_MESSAGE_TYPE', user: {"receiver_id": e.target.id, "receiver_class": 'Channel', "name": e.target.innerText}})
     }
     return ( 
