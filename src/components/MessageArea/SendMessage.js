@@ -42,7 +42,6 @@ const SendMessage = ({myfunc}) => {
     return ( 
         <div className="h-17 w-full bg-gray-700 p-4">
             <form onSubmit={handleSubmit(sendMessage)}>
-                {/* mt-4 bg-gray-100 border outline-none rounded-md p-3 w-full */}
                 <div className="flex flex-row">
                     <div className="w-full">
                         <textarea className="mt-4 bg-gray-100 border outline-none rounded-md p-3 text-black w-99 "
