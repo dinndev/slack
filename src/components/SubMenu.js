@@ -8,6 +8,7 @@ import { useCreateChannelProvider } from "../States/Reducers/CreateChannelProvid
 import { GoTriangleDown, GoTriangleRight, GoPlus } from "react-icons/go";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import env from "react-dotenv";
           
 const SubMenu = ({showSubMenu}) => {
   const [{ user }] = useAuthProvider();
@@ -15,13 +16,14 @@ const SubMenu = ({showSubMenu}) => {
   const [{ channelDescription }, dispatch] = useCreateChannelProvider();
   const [showChannels, setShowChannels] = useState(true)
   const [showDirectMessageList, setShowDirectMessageList] = useState(true)
+  
 
   // GET LIST OF CHANNELS
   useEffect(async () => {
     if (user !== undefined) {
       const responseBody = await axios({
         url: "channels",
-        baseURL: "http://206.189.91.54/api/v1/",
+        baseURL: `${env.API_URL}`,
         method: "get",
         headers: {
           expiry: user.expiry,

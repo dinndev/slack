@@ -3,6 +3,7 @@ import { MessageContext } from "../../States/MessageContext";
 import { useAuthProvider } from "../../States/AuthProvider";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import env from "react-dotenv";
 
 const SendMessage = ({myfunc}) => {
     const [{ user }] = useAuthProvider();
@@ -27,7 +28,7 @@ const SendMessage = ({myfunc}) => {
             }
         }
 
-        axios.post('http://206.189.91.54/api/v1/messages', bodyContents, requestHeaders)
+        axios.post(`${env.API_URL}/messages`, bodyContents, requestHeaders)
         .then((response) => {
             console.log("Success axios", response)
             myfunc()

@@ -5,6 +5,7 @@ import { useAuthProvider } from "../States/AuthProvider";
 import MessageAreaHeader from "./MessageArea/MessageAreaHeader";
 import SendMessage from "./MessageArea/SendMessage";
 import MessageDisplay from "./MessageArea/MessageDisplay";
+import env from "react-dotenv";
 
 const MessageArea = ({toggleSubMenu, toggleChannelDetails}) => {
     const [{ user }] = useAuthProvider();
@@ -14,7 +15,7 @@ const MessageArea = ({toggleSubMenu, toggleChannelDetails}) => {
     const myfunc = useCallback(async() => {
         if(user != undefined){
             const responseBody = await axios({
-                baseURL: "http://206.189.91.54/api/v1",
+                baseURL: `${env.API_URL}`,
                 url: '/messages',
                 method: 'get',
                 params: {
