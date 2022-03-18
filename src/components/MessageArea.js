@@ -6,7 +6,7 @@ import MessageAreaHeader from "./MessageArea/MessageAreaHeader";
 import SendMessage from "./MessageArea/SendMessage";
 import MessageDisplay from "./MessageArea/MessageDisplay";
 
-const MessageArea = ({toggleSubMenu}) => {
+const MessageArea = ({toggleSubMenu, toggleChannelDetails}) => {
     const [{ user }] = useAuthProvider();
     const {messageMode} = useContext(MessageContext);
     const [messages, setMessages] = useState([]);
@@ -53,7 +53,7 @@ const MessageArea = ({toggleSubMenu}) => {
 
     return (
         <div className="flex flex-col h-screen grow-16">
-            <MessageAreaHeader toggleSubMenu={toggleSubMenu}/>
+            <MessageAreaHeader toggleSubMenu={toggleSubMenu} toggleChannelDetails={toggleChannelDetails}/>
             {/* DISPLAY MESSAGES */}
             <div className="grow-16 overflow-y-scroll bg-gray-100">
                 <div className="flex flex-col bg-gray-100 p-2 h-fit">

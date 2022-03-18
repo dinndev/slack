@@ -60,7 +60,7 @@ const DirectMessages = () => {
             )
         })
     ) : (
-        <li className="w-fit">DirectMessages</li>
+        <li className="w-fit"></li>
     )
 }
  
