@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCreateChannelProvider } from "../../States/Reducers/CreateChannelProvider";
 import { useForm } from "react-hook-form";
 import { Alert, AlertIcon, Spinner } from "@chakra-ui/react";
 import { useAuthProvider } from "../../States/AuthProvider";
 import { useComposeMessageProvider } from "../../States/Reducers/ComposeMessageProvider";
-
-import axios from "axios";
-import env from "react-dotenv";
+import SearchSuggestions from "../SearchSuggestions";
 export default function StepTwo({
   toggleStepOne,
   setToggleStepTwo,
@@ -18,14 +16,32 @@ export default function StepTwo({
   const [{ isCreateMode }, dispatch] = useComposeMessageProvider();
   const [{ users }] = useComposeMessageProvider();
   const [error, setError] = useState("");
-
+  const [userSuggestions, setUserSuggestions] = useState([]);
+  const [isSuggest, setIsSuggest] = useState(true);
+  const [{ user }] = useAuthProvider();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    resetField,
+    setFocus,
   } = useForm();
-  const [{ user }] = useAuthProvider();
+
+  useEffect(() => {
+    // get all the email matching the search value on change
+    const filteredEmail =
+      users.length > 0
+        ? users.filter(({ email }) => email.includes(onChangeTitle))
+        : {};
+    // limit the legnth of results
+    const suggestionArray = users.length > 0 ? filteredEmail.splice(0, 10) : [];
+    setUserSuggestions(suggestionArray);
+    // toggle the suggestions
+    if (onChangeTitle === "" || onChangeTitle.length >= 8) {
+      setIsSuggest(false);
+    } else {
+      setIsSuggest(true);
+    }
+  }, [onChangeTitle, users]);
 
   const handleToggleCompose = () => {
     dispatch({
@@ -57,9 +73,11 @@ export default function StepTwo({
       <h2 className="my-20 font-bold  text-4xl">Where to send the message? </h2>
       <form className="flex w-2/5 items-end" onSubmit={handleSubmit(nexStep)}>
         <input
+          autoComplete="off"
           className="mt-4 h-full bg-gray-100 border outline-none rounded-md p-3 w-4/5"
           type="email"
           name="email"
+          value={onChangeTitle}
           {...register("email", {
             required: "true",
             onChange: (e) => setOnchangeTitle(e.target.value),
@@ -75,6 +93,15 @@ export default function StepTwo({
         >
           Submit
         </button>
+        {isSuggest && (
+          <SearchSuggestions
+            isSuggest={isSuggest}
+            setIsSuggest={setIsSuggest}
+            setOnchangeTitle={setOnchangeTitle}
+            setFocus={setFocus}
+            suggestionArray={userSuggestions}
+          />
+        )}
       </form>
       <p className="text-xs mt-10 text-gray-400">
         Changed your mind?{" "}
