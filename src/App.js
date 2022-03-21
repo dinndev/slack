@@ -14,6 +14,7 @@ import ChannelDetails from "./components/ChannelDetails";
 import MessageContextPovider from "./States/MessageContext";
 import CreateChannel from "./components/SubMenu/CreateChannel";
 import { useCreateChannelProvider } from "./States/Reducers/CreateChannelProvider";
+import ComposeMessageProvider from "./States/Reducers/ComposeMessageProvider";
 
 function App() {
   const [toggleLogin, setToggleLogin] = useState(true);
@@ -21,7 +22,6 @@ function App() {
   const [showSubMenu, setShowSubMenu] = useState(true);
   const [showChannelDetails, setShowChannelDetails] = useState(true);
   const [{ isCreateMode, error }, dispatch] = useCreateChannelProvider();
-
 
   // Create transition for login
   const transtionLogin = useTransition(toggleLogin, {
@@ -48,13 +48,13 @@ function App() {
     },
   });
 
-  const toggleSubMenu = () =>{
+  const toggleSubMenu = () => {
     setShowSubMenu(!showSubMenu);
-  }
+  };
 
-  const toggleChannelDetails = () =>{
+  const toggleChannelDetails = () => {
     setShowChannelDetails(!showChannelDetails);
-  }
+  };
 
   return (
     // Auth set up
@@ -91,9 +91,14 @@ function App() {
                         </div>
                       )}
                       <MenuBar />
-                      <SubMenu showSubMenu={showSubMenu}/>
-                      <MessageArea toggleSubMenu={toggleSubMenu} toggleChannelDetails={toggleChannelDetails}/>
-                      <ChannelDetails showChannelDetails={showChannelDetails}/>
+                      <ComposeMessageProvider>
+                        <SubMenu showSubMenu={showSubMenu} />
+                      </ComposeMessageProvider>
+                      <MessageArea
+                        toggleSubMenu={toggleSubMenu}
+                        toggleChannelDetails={toggleChannelDetails}
+                      />
+                      <ChannelDetails showChannelDetails={showChannelDetails} />
                       {isCreateMode && <CreateChannel />}
                     </div>
                   </PrivateRoute>
