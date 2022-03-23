@@ -17,15 +17,20 @@ import { useCreateChannelProvider } from "./States/Reducers/CreateChannelProvide
 import ChannelDatailsProvider from "./States/ChannelDetailsProvider";
 import axios from "axios";
 import env from "react-dotenv";
-
+import ComposeMessageProvider from "./States/Reducers/ComposeMessageProvider";
 import {
   channelReducer,
   channelDetailsInitialState,
 } from "./States/Reducers/channelDetailsReducer";
+
 function App() {
   const [toggleLogin, setToggleLogin] = useState(true);
   const [isSignupOpen, setToggleSignup] = useState(false);
-  const [{ user }] = useAuthProvider();
+
+
+    const [{ user }] = useAuthProvider();
+  const [showSubMenu, setShowSubMenu] = useState(true);
+  const [showChannelDetails, setShowChannelDetails] = useState(true);
   const [{ isCreateMode, error }, dispatch] = useCreateChannelProvider();
   useEffect(() => {
     async function getUsers() {
@@ -77,55 +82,66 @@ function App() {
     },
   });
 
+  const toggleSubMenu = () => {
+    setShowSubMenu(!showSubMenu);
+  };
+
+  const toggleChannelDetails = () => {
+    setShowChannelDetails(!showChannelDetails);
+  };
+
   return (
     // Auth set up
     <BrowserRouter>
       <div className="w-full h-full bg-gray-600">
-        <MessageContextPovider>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Auth
-                  transtionLogin={transtionLogin}
-                  transtionSignup={transtionSignup}
-                  isSignupOpen={isSignupOpen}
-                  setToggleLogin={setToggleLogin}
-                  setToggleSignup={setToggleSignup}
-                  toggleLogin={toggleLogin}
-                />
-              }
-            />
-            <Route
-              path="account"
-              element={
-                <PrivateRoute>
-                  {/* logged in account component here */}
-                  <div className="flex flex-row border border-black h-screen text-white">
-                    {error !== "" && (
-                      <div className="absolute right-0  left-0 ml-auto mr-auto">
-                        <Alert status="error">
-                          <AlertIcon />
-                          {`channel ${error}`}
-                        </Alert>
-                      </div>
-                    )}
-                    <MenuBar />
-                    <ChannelDatailsProvider
-                      reducer={channelReducer}
-                      initialState={channelDetailsInitialState}
-                    >
-                      <SubMenu />
-                      <MessageArea />
-                      <ChannelDetails />
-                    </ChannelDatailsProvider>
-                    {isCreateMode && <CreateChannel />}
-                  </div>
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-        </MessageContextPovider>
+
+        <AuthProvider reducer={AuthReducer} initialState={authInitialState}>
+          <MessageContextPovider>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Auth
+                    transtionLogin={transtionLogin}
+                    transtionSignup={transtionSignup}
+                    isSignupOpen={isSignupOpen}
+                    setToggleLogin={setToggleLogin}
+                    setToggleSignup={setToggleSignup}
+                    toggleLogin={toggleLogin}
+                  />
+                }
+              />
+              <Route
+                path="account"
+                element={
+                  <PrivateRoute>
+                    {/* logged in account component here */}
+                    <div className="flex flex-row h-screen text-white select-none">
+                      {error !== "" && (
+                        <div className="absolute right-0  left-0 ml-auto mr-auto">
+                          <Alert status="error">
+                            <AlertIcon />
+                            {`channel ${error}`}
+                          </Alert>
+                        </div>
+                      )}
+                      <MenuBar />
+                      <ComposeMessageProvider>
+                        <SubMenu showSubMenu={showSubMenu} />
+                      </ComposeMessageProvider>
+                      <MessageArea
+                        toggleSubMenu={toggleSubMenu}
+                        toggleChannelDetails={toggleChannelDetails}
+                      />
+                      <ChannelDetails showChannelDetails={showChannelDetails} />
+                      {isCreateMode && <CreateChannel />}
+                    </div>
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
+          </MessageContextPovider>
+        </AuthProvider>
       </div>
     </BrowserRouter>
   );
