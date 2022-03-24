@@ -1,5 +1,6 @@
 import { useChannelDetailsContext } from "../States/ChannelDetailsProvider";
 import { useCreateChannelProvider } from "../States/Reducers/CreateChannelProvider";
+
 const ChannelDetails = () => {
   const [{ channelDetailsData }] = useChannelDetailsContext();
   const [{ users }] = useCreateChannelProvider();
@@ -20,7 +21,6 @@ const ChannelDetails = () => {
         <h1 className="text-xl font-bold">{name}</h1>
         <div className="flex mt-5 items-center ">
           <p className=" text-xs"> {hostName && hostName}</p>
-
         </div>
         <ul className="flex flex-col mt-10 ">
           <h1 className="font-bold text-md mb-5"> Channel members</h1>
