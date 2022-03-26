@@ -11,7 +11,7 @@ const ACTIONS = {
   set_user: "SET_USER",
 };
 
-export default function AuthReducer(state, action) {
+export function AuthReducer(state, action) {
   const { set_user } = ACTIONS;
   switch (action.type) {
     case set_user:
