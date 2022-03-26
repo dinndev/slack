@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useAuthProvider } from "../States/AuthProvider";
 import Channels from "./SubMenu/Channels";
 import DirectMessages from "./SubMenu/DirectMessages";
@@ -11,6 +11,7 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import env from "react-dotenv";
 import { useComposeMessageProvider } from "../States/Reducers/ComposeMessageProvider";
 import ComposeMessage from "./SubMenu/ComposeMessage";
+import { ChannelListContext } from "../States/ChannelListContext";
 
 const SubMenu = ({ showSubMenu }) => {
   const [{ user }] = useAuthProvider();
@@ -19,25 +20,54 @@ const SubMenu = ({ showSubMenu }) => {
   const [showChannels, setShowChannels] = useState(true);
   const [{ isCreateMode }, composeDispatch] = useComposeMessageProvider();
   const [showDirectMessageList, setShowDirectMessageList] = useState(true);
+  const {channelList, dispatch: channelListDispatch} = useContext(ChannelListContext)
+
+  const myFunction = async () => {
+    const responseBody = await axios({
+      url: "channels",
+      baseURL: `${env.API_URL}`,
+      method: "get",
+      headers: {
+        expiry: user.expiry,
+        uid: user.uid,
+        "access-token": user["access-token"],
+        client: user.client,
+      },
+    }).then((response) => {
+      setChannels(response.data.data);
+      console.log("channels list: ", response.data.data);
+      channelListDispatch({type: 'SET_USER_CHANNEL_LIST', userChannels: response.data.data})
+      return response;
+    });
+    return responseBody;
+  }
+
 
   // GET LIST OF CHANNELS
   useEffect(async () => {
     if (user !== undefined) {
-      const responseBody = await axios({
-        url: "channels",
-        baseURL: `${env.API_URL}`,
-        method: "get",
-        headers: {
-          expiry: user.expiry,
-          uid: user.uid,
-          "access-token": user["access-token"],
-          client: user.client,
-        },
-      }).then((response) => {
-        setChannels(response.data.data);
-        return response;
-      });
-      return responseBody;
+      // const myFunction = async () => {
+      //   const responseBody = await axios({
+      //     url: "channels",
+      //     baseURL: `${env.API_URL}`,
+      //     method: "get",
+      //     headers: {
+      //       expiry: user.expiry,
+      //       uid: user.uid,
+      //       "access-token": user["access-token"],
+      //       client: user.client,
+      //     },
+      //   }).then((response) => {
+      //     setChannels(response.data.data);
+      //     console.log("channels list: ", response.data.data);
+      //     channelListDispatch({type: 'SET_USER_CHANNEL_LIST', userChannels: response.data.data})
+      //     return response;
+      //   });
+      //   return responseBody;
+      // }
+
+      myFunction();
+      
     }
   }, [user, channelDescription]);
 
@@ -130,7 +160,7 @@ const SubMenu = ({ showSubMenu }) => {
             showDirectMessageList == true ? "block" : "hidden"
           }`}
         >
-          <DirectMessages />
+          <DirectMessages myFunction={myFunction}/>
         </ul>
       </div>
       {isCreateMode && <ComposeMessage />}

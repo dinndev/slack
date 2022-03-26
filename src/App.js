@@ -17,6 +17,7 @@ import ChannelDatailsProvider from "./States/ChannelDetailsProvider";
 import axios from "axios";
 import env from "react-dotenv";
 import ComposeMessageProvider from "./States/Reducers/ComposeMessageProvider";
+import ChannelListContextProvider from "./States/ChannelListContext";
 
 import {
   channelReducer,
@@ -93,12 +94,15 @@ function App() {
     // Auth set up
     <BrowserRouter>
       <div className="w-full h-full bg-gray-600">
+
         <ChannelDatailsProvider
           reducer={channelReducer}
           initialState={channelDetailsInitialState}
         >
           <AuthProvider reducer={AuthReducer} initialState={authInitialState}>
             <MessageContextPovider>
+            <ChannelListContextProvider>
+            
               <Routes>
                 <Route
                   path="/"
@@ -135,13 +139,17 @@ function App() {
                           toggleSubMenu={toggleSubMenu}
                           toggleChannelDetails={toggleChannelDetails}
                         />
-                        {showChannelDetails && <ChannelDetails />}
+
+                        {showChannelDetails && <ChannelDetails showChannelDetails={showChannelDetails}/>}
+
                         {isCreateMode && <CreateChannel />}
                       </div>
                     </PrivateRoute>
                   }
                 />
               </Routes>
+
+              </ChannelListContextProvider>
             </MessageContextPovider>
           </AuthProvider>
         </ChannelDatailsProvider>
